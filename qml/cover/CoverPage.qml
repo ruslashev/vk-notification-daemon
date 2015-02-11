@@ -6,14 +6,14 @@ CoverBackground {
 	Column {
 		anchors.centerIn: parent
 		Label {
-			id: name
-			text: qsTr("VK notification\ndaemon")
+			id: appName
+			text: qsTr("VK daemon")
 			color: Theme.secondaryHighlightColor
 			anchors.horizontalCenter: parent.horizontalCenter
 		}
 		Label {
-			id: status
-			text: qsTr("Not logged in")
+			id: signInStatus
+			text: qsTr("Not signed in")
 			color: Theme.primaryColor
 			anchors.horizontalCenter: parent.horizontalCenter
 		}
