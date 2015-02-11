@@ -2,32 +2,28 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 Page {
-    id: page
+	id: page
 
-    SilicaFlickable {
-        anchors.fill: parent
+	SilicaFlickable {
+		anchors.fill: parent
 
-        Component.onCompleted: {
-			pageStack.push(Qt.resolvedUrl("SignIn.qml"))
-        }
+		contentHeight: column.height
 
-        contentHeight: column.height
+		Column {
+			id: column
 
-        Column {
-            id: column
-
-            width: page.width
-            spacing: Theme.paddingLarge
-            PageHeader {
-                title: qsTr("UI Template")
-            }
-            Label {
-                x: Theme.paddingLarge
-                text: qsTr("Hello Sailors")
-                color: Theme.secondaryHighlightColor
-                font.pixelSize: Theme.fontSizeExtraLarge
-            }
-        }
-    }
+			width: page.width
+			spacing: Theme.paddingLarge
+			PageHeader {
+				title: qsTr("UI Template")
+			}
+			Label {
+				x: Theme.paddingLarge
+				text: qsTr("Hello Sailors")
+				color: Theme.secondaryHighlightColor
+				font.pixelSize: Theme.fontSizeExtraLarge
+			}
+		}
+	}
 }
 

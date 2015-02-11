@@ -3,7 +3,7 @@ import Sailfish.Silica 1.0
 
 ApplicationWindow
 {
-    initialPage: Component { MainPage { } }
+    initialPage: Component { SignIn { } }
     cover: Qt.resolvedUrl("cover/CoverPage.qml")
 }
 

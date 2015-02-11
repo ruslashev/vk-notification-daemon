@@ -7,44 +7,44 @@ Page {
 	SilicaFlickable {
 		anchors.fill: parent
 
-		PullDownMenu {
-			MenuItem {
-				text: qsTr("Show password")
-				onClicked:
-					password.echoMode =
-						password.echoMode == TextInput.Password ?
-							TextInput.Normal :
-							TextInput.Password
+		Column {
+			id: textInputsColumn
+			width: parent.width
+
+			PageHeader {
+				title: qsTr("Sign in")
 			}
-		}
 
-		// todo : column
-		PageHeader {
-			id: header
-			title: qsTr("Sign in")
-		}
+			TextField {
+				id: login
+				width: parent.width
 
-		TextField {
-			id: login
+				inputMethodHints: Qt.ImhEmailCharactersOnly
+				focus: true
+				placeholderText: "E-mail or Login"
+				label: placeholderText
+				EnterKey.onClicked: {
+					password.focus = true;
+				}
+			}
+			TextField {
+				id: password
+				width: parent.width
 
-			width: parent.width
-			anchors.top: header.bottom
+				echoMode: showPassword.checked ? TextInput.Normal : TextInput.Password
+				placeholderText: "Password"
+				label: placeholderText
 
-			inputMethodHints: Qt.ImhEmailCharactersOnly
+				EnterKey.onClicked: {
+					parent.focus = true;
+				}
+			}
 
-			placeholderText: "E-mail or login"
-			label: placeholderText
-		}
-		TextField {
-			id: password
-
-			width: parent.width
-			anchors.top: login.bottom
-
-			echoMode: TextInput.Password
-
-			placeholderText: "Password"
-			label: placeholderText
+			TextSwitch {
+				id: showPassword
+				checked: false
+				text: qsTr("Show password")
+			}
 		}
 	}
 }
