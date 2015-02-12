@@ -2,20 +2,29 @@ import QtQuick 2.0
 import Sailfish.Silica 1.0
 
 CoverBackground {
+	id: background
 	anchors.fill: parent
+	anchors.margins: Theme.paddingLarge
 	Column {
 		anchors.centerIn: parent
 		Label {
 			id: appName
-			text: qsTr("VK daemon")
-			color: Theme.secondaryHighlightColor
+			width: background.width
+			wrapMode: TextEdit.WordWrap
 			anchors.horizontalCenter: parent.horizontalCenter
+			color: Theme.secondaryHighlightColor
+
+			font.pixelSize: Theme.fontSizeSmall
+			text: qsTr("VK notification daemon")
 		}
 		Label {
 			id: signInStatus
-			text: qsTr("Not signed in")
-			color: Theme.primaryColor
+			width: background.width
+			wrapMode: TextEdit.WordWrap
 			anchors.horizontalCenter: parent.horizontalCenter
+			color: Theme.primaryColor
+
+			text: qsTr("Not signed in blalb lba lab lab abl ")
 		}
 	}
 }

@@ -35,6 +35,11 @@ Page {
 				placeholderText: "Password"
 				label: placeholderText
 
+				// onStatusChanged: {
+				// 	if (status == PageStatus.Active) {
+				// 		pageStack.pushAttached(attachedPage)
+				// 	}
+				// }
 				EnterKey.onClicked: {
 					parent.focus = true;
 				}
