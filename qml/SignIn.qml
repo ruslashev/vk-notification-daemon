@@ -4,6 +4,12 @@ import Sailfish.Silica 1.0
 Page {
 	id: signInPage
 
+	onStatusChanged: {
+		if (status == PageStatus.Active) {
+			pageStack.pushAttached(signInLoading)
+		}
+	}
+
 	SilicaFlickable {
 		anchors.fill: parent
 
@@ -12,7 +18,7 @@ Page {
 			width: parent.width
 
 			PageHeader {
-				title: qsTr("Sign in")
+				title: "Sign in"
 			}
 
 			TextField {
@@ -23,32 +29,45 @@ Page {
 				focus: true
 				placeholderText: "E-mail or Login"
 				label: placeholderText
-				EnterKey.onClicked: {
-					password.focus = true;
-				}
+				EnterKey.onClicked: password.focus = true
+				EnterKey.iconSource: "image://theme/icon-m-enter-accept"
 			}
 			TextField {
 				id: password
 				width: parent.width
 
 				echoMode: showPassword.checked ? TextInput.Normal : TextInput.Password
+
 				placeholderText: "Password"
 				label: placeholderText
-
-				// onStatusChanged: {
-				// 	if (status == PageStatus.Active) {
-				// 		pageStack.pushAttached(attachedPage)
-				// 	}
-				// }
-				EnterKey.onClicked: {
-					parent.focus = true;
-				}
+				EnterKey.onClicked: pageStack.navigateForward(PageStackAction.Animated)
+				EnterKey.iconSource: "image://theme/icon-m-enter-next"
 			}
 
 			TextSwitch {
 				id: showPassword
-				checked: false
-				text: qsTr("Show password")
+				text: "Show password"
+			}
+		}
+	}
+
+	Page {
+		id: signInLoading
+
+		backNavigation: false
+
+		Column {
+			width: parent.width
+			anchors.centerIn: parent
+			spacing: Theme.paddingSmall
+
+			BusyIndicator {
+				running: true
+				size: BusyIndicatorSize.Large
+				anchors.horizontalCenter: parent.horizontalCenter
+			}
+			InfoLabel {
+				text: "Loading..."
 			}
 		}
 	}
