@@ -1,75 +1,60 @@
 import QtQuick 2.0
+import QtWebKit 3.0
 import Sailfish.Silica 1.0
 
 Page {
-	id: signInPage
-
-	onStatusChanged: {
-		if (status == PageStatus.Active) {
-			pageStack.pushAttached(signInLoading)
-		}
-	}
+	id: webViewPage
 
 	SilicaFlickable {
-		anchors.fill: parent
+		id: menuFlickable
+		anchors.top: parent.top
+		anchors.left: parent.left
+		anchors.right: parent.right
+		anchors.bottom: parent.top
 
-		Column {
-			id: textInputsColumn
-			width: parent.width
-
-			PageHeader {
-				title: "Sign in"
-			}
-
-			TextField {
-				id: login
-				width: parent.width
-
-				inputMethodHints: Qt.ImhEmailCharactersOnly
-				focus: true
-				placeholderText: "E-mail or Login"
-				label: placeholderText
-				EnterKey.onClicked: password.focus = true
-				EnterKey.iconSource: "image://theme/icon-m-enter-accept"
-			}
-			TextField {
-				id: password
-				width: parent.width
-
-				echoMode: showPassword.checked ? TextInput.Normal : TextInput.Password
-
-				placeholderText: "Password"
-				label: placeholderText
-				EnterKey.onClicked: pageStack.navigateForward(PageStackAction.Animated)
-				EnterKey.iconSource: "image://theme/icon-m-enter-next"
-			}
-
-			TextSwitch {
-				id: showPassword
-				text: "Show password"
+		PullDownMenu {
+			id: pullDownMenu
+			enabled: true
+			MenuItem {
+				text: "Reload"
+				onClicked: webView.reload()
 			}
 		}
 	}
 
-	Page {
-		id: signInLoading
+	SilicaWebView {
+		id: webView
+		anchors.fill: parent
+		opacity: 0
 
-		backNavigation: false
+		url: "http://example.com"
 
-		Column {
-			width: parent.width
-			anchors.centerIn: parent
-			spacing: Theme.paddingSmall
-
-			BusyIndicator {
-				running: true
-				size: BusyIndicatorSize.Large
-				anchors.horizontalCenter: parent.horizontalCenter
-			}
-			InfoLabel {
-				text: "Loading..."
+		onLoadingChanged: {
+			if (loadRequest.status == WebView.LoadSucceededStatus) {
+				opacity = 1
+				menuFlickable.anchors.top = parent.top
+				menuFlickable.anchors.left = parent.left
+				menuFlickable.anchors.right = parent.right
+				menuFlickable.anchors.bottom = parent.top
+				menuFlickable.pullDownMenu.enabled = false
+				anchors.fill = parent
+			} else {
+				opacity = 0
+				anchors.top = parent.top
+				anchors.left = parent.left
+				anchors.right = parent.right
+				anchors.bottom = parent.top
+				menuFlickable.pullDownMenu.enabled = true
+				menuFlickable.anchors.fill = parent
 			}
 		}
+
+		FadeAnimation on opacity {}
+	}
+
+	ViewPlaceholder {
+		enabled: webView.opacity === 0 && !webView.loading
+		text: "Error loading login page"
+		hintText: "Check network connectivity and pull down to reload"
 	}
 }
-
