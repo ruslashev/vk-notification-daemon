@@ -2,20 +2,25 @@ import QtQuick 2.0
 import QtWebKit 3.0
 import Sailfish.Silica 1.0
 
+import "login.js" as Login
+
 Page {
 	id: webViewPage
 
 	allowedOrientations: Orientation.All
 
-	property bool webViewLoadingSucceeded: false
+	onStatusChanged: {
+		if (status == PageStatus.Activating) {
+			Login.directToPage()
+		}
+	}
 
+	property bool webViewLoadingSucceeded: false
 	SilicaWebView {
 		id: webView
 		anchors.fill: parent
 		anchors.rightMargin: webViewPage.isPortrait ? 0 : progressPanel.visibleSize
 		anchors.bottomMargin: webViewPage.isPortrait ? progressPanel.visibleSize : 0
-
-		url: "http://example.com"
 
 		opacity: 0
 
@@ -23,6 +28,7 @@ Page {
 			if (loadRequest.status === WebView.LoadSucceededStatus) {
 				webViewLoadingSucceeded = true
 				opacity = 1
+				Login.pageLoadingFinished(url)
 			}
 		}
 	}
