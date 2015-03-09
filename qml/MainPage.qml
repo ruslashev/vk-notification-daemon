@@ -6,7 +6,7 @@ Page {
 
 	onStatusChanged: {
 		if (status == PageStatus.Active) {
-			pageStack.pushAttached(Qt.resolvedUrl("SignIn.qml"))
+			pageStack.pushAttached(Qt.resolvedUrl("SignInOld.qml"))
 		}
 	}
 
