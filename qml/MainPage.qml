@@ -6,7 +6,7 @@ Page {
 
 	onStatusChanged: {
 		if (status == PageStatus.Active) {
-			pageStack.pushAttached(Qt.resolvedUrl("SignInOld.qml"))
+			pageStack.pushAttached(Qt.resolvedUrl("SignIn.qml"))
 		}
 	}
 
@@ -16,12 +16,12 @@ Page {
 		PageHeader {
 			title: "Sign In"
 		}
-	}
 
-	ViewPlaceholder {
-		enabled: true
-		text: "Not Signed In"
-		hintText: "Flick left to access the sign in page"
+		ViewPlaceholder {
+			enabled: true
+			text: "Not Signed In"
+			hintText: "Flick left to access the sign in page"
+		}
 	}
 }
 
