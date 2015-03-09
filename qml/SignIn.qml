@@ -35,7 +35,7 @@ Page {
 
 	SilicaFlickable {
 		anchors.fill: parent
-		visible: !webViewLoadingSucceeded
+		visible: !webViewLoadingSucceeded && !webView.loading
 		ViewPlaceholder {
 			id: loadingErrorPlaceholder
 			text: "Error loading login page"
