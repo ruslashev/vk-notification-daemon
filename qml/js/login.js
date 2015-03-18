@@ -1,4 +1,5 @@
 .import "super-secret-key.js" as SSK
+.import "local_storage.js" as Local_Storage
 
 function getLoginURL()
 {
@@ -37,5 +38,12 @@ function pageLoadingFinished(url)
 	console.log("Access token: " + access_token)
 	console.log("Expires in: " + expires_in)
 	console.log("User id: " + user_id)
+
+	Local_Storage.clearDB()
+	Local_Storage.constructDB()
+	Local_Storage.insert("access_token", access_token)
+	Local_Storage.insert("expires_in", expires_in)
+	Local_Storage.insert("user_id", user_id)
+	Local_Storage.printDB()
 }
 
