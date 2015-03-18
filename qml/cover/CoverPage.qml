@@ -15,7 +15,7 @@ CoverBackground {
 			color: Theme.secondaryHighlightColor
 
 			font.pixelSize: Theme.fontSizeSmall
-			text: qsTr("VK notification daemon")
+			text: "VK notification daemon"
 		}
 		Label {
 			id: signInStatus
@@ -24,7 +24,7 @@ CoverBackground {
 			anchors.horizontalCenter: parent.horizontalCenter
 			color: Theme.primaryColor
 
-			text: qsTr("Not signed in blalb lba lab lab abl ")
+			text: "Not signed in blalb lba lab lab abl "
 		}
 	}
 }

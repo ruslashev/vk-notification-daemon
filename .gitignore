@@ -2,5 +2,5 @@
 
 translations/*
 
-qml/super-secret-key.js
+qml/js/super-secret-key.js
 
