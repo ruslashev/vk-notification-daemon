@@ -9,18 +9,17 @@ Page {
 
 	allowedOrientations: Orientation.All
 
-	onStatusChanged: {
-		if (status == PageStatus.Activating) {
-			Login.directToPage()
-		}
-	}
-
 	property bool webViewLoadingSucceeded: false
 	SilicaWebView {
 		id: webView
-		anchors.fill: parent
-		anchors.rightMargin: webViewPage.isPortrait ? 0 : progressPanel.visibleSize
-		anchors.bottomMargin: webViewPage.isPortrait ? progressPanel.visibleSize : 0
+
+		anchors {
+			fill: parent
+			rightMargin: webViewPage.isPortrait ? 0 : progressPanel.visibleSize
+			bottomMargin: webViewPage.isPortrait ? progressPanel.visibleSize : 0
+		}
+
+		url: Login.getLoginURL()
 
 		opacity: 0
 
