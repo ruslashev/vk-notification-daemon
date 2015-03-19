@@ -25,24 +25,23 @@ function insert(key, value)
 
 function select(key)
 {
+	var result = -1;
 	getDB().transaction(function(tx) {
-		var rs = tx.executeSql('SELECT value FROM Auth WHERE key=?', key);
-		if (rs.rows.length === 0)
-			return -1;
-		else
-			return rs.rows.item(0).value;
+		var rs = tx.executeSql('SELECT * FROM Auth WHERE key=?', key);
+		if (rs.rows.length !== 0)
+			result = rs.rows.item(0).value;
 	})
+	return result;
 }
 
 function printDB()
 {
 	getDB().transaction(function(tx) {
 		var rs = tx.executeSql('SELECT * FROM Auth');
-		var r = "\ndb contents:";
-		for(var i = 0; i < rs.rows.length; i++) {
-			r += "\n" + rs.rows.item(i).key + " -> " + rs.rows.item(i).value;
+		console.log("db contents:");
+		for (var i = 0; i < rs.rows.length; i++) {
+			console.info(rs.rows.item(i).key + " -> " + rs.rows.item(i).value);
 		}
-		console.log(r);
 	})
 }
 

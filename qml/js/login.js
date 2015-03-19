@@ -23,15 +23,17 @@ function getLoginURL()
 	return url;
 }
 
-function pageLoadingFinished(url)
+function webViewLoadingFinished(url)
 {
-	console.log("URL loaded: " + url);
+	console.log("URL returned: " + url);
 
 	var str = url.toString();
 
 	var access_token_start = str.indexOf("access_token");
 	var expires_in_start   = str.indexOf("&expires_in");
 	var user_id_start      = str.indexOf("&user_id");
+
+	// todo: error handling (str.indexOf === -1)
 
 	var access_token = str.substring(access_token_start + 13, expires_in_start);
 	var expires_in = str.substring(expires_in_start + 12, user_id_start);
@@ -41,16 +43,12 @@ function pageLoadingFinished(url)
 	console.log("Expires in: " + expires_in);
 	console.log("User id: " + user_id);
 
-	Storage.clearDB();
-	Storage.constructDB();
 	Storage.insert("access_token", access_token);
 	Storage.insert("expires_in", expires_in);
 	Storage.insert("user_id", user_id);
+
 	Storage.printDB();
 
-	console.log(Storage.select("access_token"));
-
-	// true for success
 	return true;
 }
 
