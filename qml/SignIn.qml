@@ -6,6 +6,7 @@ import "js/login.js" as Login
 
 Page {
 	id: webViewPage
+	backNavigation: false
 
 	allowedOrientations: Orientation.All
 
@@ -27,7 +28,11 @@ Page {
 			if (loadRequest.status === WebView.LoadSucceededStatus) {
 				webViewLoadingSucceeded = true
 				opacity = 1
-				Login.pageLoadingFinished(url)
+				var res = Login.pageLoadingFinished(url)
+				if (res === true) {
+					console.log("ikr")
+					pageStack.pop()
+				} // else well shit
 			}
 		}
 	}

@@ -19,7 +19,18 @@ function constructDB()
 function insert(key, value)
 {
 	getDB().transaction(function(tx) {
-		tx.executeSql('INSERT INTO Auth VALUES(?, ?)', [ key, value ]);
+		tx.executeSql('INSERT OR REPLACE INTO Auth VALUES(?, ?)', [ key, value ]);
+	})
+}
+
+function select(key)
+{
+	getDB().transaction(function(tx) {
+		var rs = tx.executeSql('SELECT value FROM Auth WHERE key=?', key);
+		if (rs.rows.length === 0)
+			return -1;
+		else
+			return rs.rows.item(0).value;
 	})
 }
 

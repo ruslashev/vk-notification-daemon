@@ -1,5 +1,7 @@
 .import "super-secret-key.js" as SSK
 .import "storage.js" as Storage
+.import QtQuick 2.0 as QtQ
+.import Sailfish.Silica 1.0 as Silica
 
 function getLoginURL()
 {
@@ -45,5 +47,10 @@ function pageLoadingFinished(url)
 	Storage.insert("expires_in", expires_in);
 	Storage.insert("user_id", user_id);
 	Storage.printDB();
+
+	console.log(Storage.select("access_token"));
+
+	// true for success
+	return true;
 }
 
