@@ -12,24 +12,23 @@ Page {
 
 	function checkIfSignedIn()
 	{
-		Storage.constructDB();
-
 		var access_token = Storage.select("access_token");
-
 		console.log("Checking for access_token: " + access_token);
-
-		if (access_token === -1) {
-			pageStack.push(Qt.resolvedUrl("SignIn.qml"))
-		} else {
+		if (access_token !== -1) {
 			signedIn = true;
 		}
 	}
 
+	function resetLogin()
+	{
+		Storage.clearDB();
+		Storage.constructDB();
+		signedIn = false;
+	}
+
 	onStatusChanged: {
-		if (status == PageStatus.Activating) {
-			Storage.clearDB();
-		}
 		if (status == PageStatus.Active) {
+			Storage.constructDB();
 			checkIfSignedIn();
 		}
 	}
@@ -37,9 +36,25 @@ Page {
 	SilicaFlickable {
 		anchors.fill: parent
 
-		PageHeader {
-			title: "vk notification daemon"
+		PullDownMenu {
+			id: pullDownMenu
+			MenuItem {
+				text: "Sign In"
+				visible: !signedIn
+				onClicked: pageStack.push(Qt.resolvedUrl("SignIn.qml"))
+			}
+			MenuItem {
+				text: "Log out"
+				visible: signedIn
+				onClicked: resetLogin();
+			}
+		}
+
+		ViewPlaceholder {
+			enabled: !signedIn
+			text: "Not Signed In"
+			hintText: "Flick down to access pulley menu"
 		}
 	}
-}
+ }
 

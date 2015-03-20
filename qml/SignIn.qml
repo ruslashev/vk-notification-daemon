@@ -4,87 +4,83 @@ import Sailfish.Silica 1.0
 
 import "js/login.js" as Login
 
-Component {
+Page {
 	id: webViewPage
-	Dialog {
-		canAccept: true
-		acceptDestination: mainPage
-		acceptDestinationAction: PageStackAction.Pop
-		allowedOrientations: Orientation.All
 
-		property bool webViewLoadingSucceeded: false
-		property bool webViewLoadingStarted: false
+	// backNavigation: false
+	// showNavigationIndicator: false
 
-		SilicaFlickable {
-			width: parent.width
-			height: parent.height
-			SilicaWebView {
-				id: webView
+	allowedOrientations: Orientation.All
 
-				anchors {
-					fill: parent
-					rightMargin: webViewPage.isPortrait ? 0 : progressPanel.visibleSize
-					bottomMargin: webViewPage.isPortrait ? progressPanel.visibleSize : 0
-				}
+	property bool webViewLoadingSucceeded: false
+	property bool webViewLoadingStarted: false
 
-				url: Login.getLoginURL()
+	SilicaWebView {
+		id: webView
 
-				opacity: 0
+		anchors {
+			fill: parent
+			rightMargin: webViewPage.isPortrait ? 0 : progressPanel.visibleSize
+			bottomMargin: webViewPage.isPortrait ? progressPanel.visibleSize : 0
+		}
 
-				onLoadingChanged: {
-					if (loadRequest.status === WebView.LoadSucceededStatus) {
-						webViewLoadingSucceeded = true
-						opacity = 1
-						var res = Login.webViewLoadingFinished(url)
-						if (res === true) {
-							pageStack.pop(undefined, PageStackAction.Animated)
-						}
-					}
+		url: Login.getLoginURL()
+
+		opacity: 0
+
+		onLoadingChanged: {
+			webViewLoadingStarted = true
+			if (loadRequest.status === WebView.LoadSucceededStatus) {
+				webViewLoadingSucceeded = true
+				opacity = 1
+				var res = Login.webViewLoadingFinished(url)
+				if (res === true) {
+					pageStack.pop(undefined, PageStackAction.Animated)
 				}
 			}
 		}
+	}
 
-		SilicaFlickable {
-			anchors.fill: parent
-			visible: !webViewLoadingSucceeded && !webView.loading && !webViewLoadingStarted
-			ViewPlaceholder {
-				id: loadingErrorPlaceholder
-				text: "Error loading login page"
-				hintText: "Plese check network connectivity and try again"
-				enabled: true
-				anchors.horizontalCenter: parent.horizontalCenter
-			}
-			Button {
-				text: "Retry"
-				onClicked: webView.reload()
-				anchors {
-					horizontalCenter: parent.horizontalCenter
-					top: loadingErrorPlaceholder.bottom
-					topMargin: Theme.paddingLarge
-				}
+	SilicaFlickable {
+		anchors.fill: parent
+		visible: !webViewLoadingSucceeded && !webView.loading && webViewLoadingStarted
+		ViewPlaceholder {
+			id: loadingErrorPlaceholder
+			text: "Error loading login page"
+			hintText: "Plese check network connectivity and try again"
+			enabled: true // what
+			anchors.horizontalCenter: parent.horizontalCenter
+		}
+		Button {
+			text: "webView.reload() doesn't work\nand I don't know why. i mean\nwhy would you even try to login\nwithout internet connection, dude?"
+			onClicked: webView.reload()
+			anchors {
+				horizontalCenter: parent.horizontalCenter
+				top: loadingErrorPlaceholder.bottom
+				topMargin: Theme.paddingLarge + 25
 			}
 		}
+	}
 
-		DockedPanel {
-			id: progressPanel
+	DockedPanel {
+		id: progressPanel
 
-			open: webView.loading
+		open: webView.loading
 
-			width: webViewPage.isPortrait ? parent.width : Theme.itemSizeExtraLarge + Theme.paddingLarge
-			height: webViewPage.isPortrait ? Theme.itemSizeExtraLarge + Theme.paddingLarge : parent.height
+		width: webViewPage.isPortrait ? parent.width : Theme.itemSizeExtraLarge + Theme.paddingLarge
+		height: webViewPage.isPortrait ? Theme.itemSizeExtraLarge + Theme.paddingLarge : parent.height
 
-			dock: webViewPage.isPortrait ? Dock.Bottom : Dock.Right
+		dock: webViewPage.isPortrait ? Dock.Bottom : Dock.Right
 
-			ProgressCircle {
-				anchors.centerIn: parent
+		ProgressCircle {
+			anchors.centerIn: parent
 
-				NumberAnimation on value {
-					from: 0
-					to: 1
-					duration: 1000
-					running: progressPanel.expanded
-					loops: Animation.Infinite
-				}
+			NumberAnimation on value {
+				from: 0
+				to: 1
+				duration: 1000
+				running: progressPanel.expanded
+				loops: Animation.Infinite
 			}
 		}
 	}

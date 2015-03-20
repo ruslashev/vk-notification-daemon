@@ -27,6 +27,8 @@ function webViewLoadingFinished(url)
 {
 	console.log("URL returned: " + url);
 
+	// todo did not return blank.html
+
 	var str = url.toString();
 
 	var access_token_start = str.indexOf("access_token");
@@ -46,6 +48,8 @@ function webViewLoadingFinished(url)
 	Storage.insert("access_token", access_token);
 	Storage.insert("expires_in", expires_in);
 	Storage.insert("user_id", user_id);
+
+	// todo: did not insert
 
 	Storage.printDB();
 
