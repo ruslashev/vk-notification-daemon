@@ -16,11 +16,13 @@ Page {
 	{
 		var user_id = Storage.select("user_id");
 		// pray for user_id
-		Api.makeRequest("users.get", access_token_pty, { user_id: user_id },
+		Api.makeRequest("users.get", access_token_pty, { user_id: user_id, fields: 'photo_100' },
 		function(data) {
 			console.log("data[0].first_name: " + data[0].first_name);
 			console.log("data[0].last_name: " + data[0].last_name);
+			console.log("data[0].photo_100: " + data[0].photo_100);
 			nameLabel.text = data[0].first_name + " " + data[0].last_name;
+			avatarImage.source = data[0].photo_100;
 		})
 	}
 
@@ -31,7 +33,6 @@ Page {
 		if (access_token !== -1) {
 			signedIn = true;
 			access_token_pty = access_token;
-
 			getNameAndAvatar();
 		}
 	}
@@ -73,23 +74,60 @@ Page {
 			hintText: "Flick down to access pulley menu"
 		}
 
-		Column {
+		Item {
 			anchors.fill: parent
-
-			y: Theme.paddingLarge
-
+			visible: signedIn
 			Label {
+				id: signedInAsTextLabel
 				text: "Signed in as:"
-				anchors.horizontalCenter: parent.horizontalCenter
+				anchors {
+					top: parent.top
+					topMargin: Theme.paddingLarge
+					horizontalCenter: parent.horizontalCenter
+				}
 				color: Theme.secondaryHighlightColor
 			}
-			Label {
-				id: nameLabel
-				anchors.horizontalCenter: parent.horizontalCenter
-				font.pixelSize: Theme.fontSizeLarge
-				color: Theme.highlightColor
+
+			Item {
+				width: parent.width
+				height: avatarImage.height + Theme.paddingMedium*2
+				anchors {
+					top: signedInAsTextLabel.bottom
+					topMargin: Theme.paddingMedium
+				}
+
+				Rectangle {
+					anchors.fill: parent
+					color: Theme.highlightColor
+					opacity: 0.3
+					z: -1
+				}
+
+				Image {
+					id: avatarImage
+					anchors {
+						left: parent.left
+						leftMargin: Theme.paddingMedium
+						verticalCenter: parent.verticalCenter
+					}
+					source: "image://theme/icon-launcher-component-gallery"
+					fillMode: Image.PreserveAspectFit
+					width: 100
+					height: 100
+				}
+
+				Label {
+					id: nameLabel
+					anchors {
+						left: avatarImage.right
+						leftMargin: Theme.paddingMedium
+						verticalCenter: parent.verticalCenter
+					}
+					font.pixelSize: Theme.fontSizeLarge
+					color: Theme.highlightColor
+				}
 			}
 		}
 	}
- }
+}
 

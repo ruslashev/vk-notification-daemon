@@ -24,8 +24,3 @@ function makeRequest(method, access_token, params, processingCallback)
 	get(url, processingCallback);
 }
 
-function getName(user_id)
-{
-
-}
-
