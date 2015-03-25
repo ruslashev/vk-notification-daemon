@@ -142,6 +142,7 @@ Page {
 
 				ComboBox {
 					label: "Vibration:"
+					currentIndex: 1
 					menu: ContextMenu {
 						MenuItem { text: "Off" }
 						MenuItem { text: "Short" }
@@ -179,7 +180,14 @@ Page {
 				Button {
 					text: "Test notification"
 					anchors.horizontalCenter: parent.horizontalCenter
+					anchors.topMargin: Theme.paddingLarge
 					onReleased: notification()
+				}
+				Button {
+					text: "Get unread messages"
+					anchors.horizontalCenter: parent.horizontalCenter
+					anchors.topMargin: Theme.paddingLarge
+					onReleased: pollForUnreadMessages()
 				}
 			}
 		}
@@ -195,7 +203,7 @@ Page {
 	HapticsEffect {
 		id: notificationVibrationLong
 		intensity: 0.6
-		duration: 700
+		duration: 1000
 	}
 
 	HapticsEffect {
@@ -213,6 +221,15 @@ Page {
 		} else if (vibrationCombo.currentIndex === 3) {
 			notificationVibrationCustom.start();
 		}
+	}
+
+	function pollForUnreadMessages()
+	{
+		console.log("Getting unread messages...");
+		Api.makeRequest("messages.getDialogs", access_token_pty, { count: 0, unread: 1 },
+		function(data) {
+			console.log("response[0].count: " + data[0].count);
+		});
 	}
 }
 
