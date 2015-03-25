@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import QtFeedback 5.0
 import Sailfish.Silica 1.0
 
 import "js/storage.js" as Storage
@@ -89,6 +90,7 @@ Page {
 			}
 
 			Item {
+				id: signedInAsContainer
 				width: parent.width
 				height: avatarImage.height + Theme.paddingMedium*2
 				anchors {
@@ -110,7 +112,7 @@ Page {
 						leftMargin: Theme.paddingMedium
 						verticalCenter: parent.verticalCenter
 					}
-					source: "image://theme/icon-launcher-component-gallery"
+					source: "image://theme/nemomobile-busyindicator"
 					fillMode: Image.PreserveAspectFit
 					width: 100
 					height: 100
@@ -123,10 +125,108 @@ Page {
 						leftMargin: Theme.paddingMedium
 						verticalCenter: parent.verticalCenter
 					}
+					text: "Loading..."
 					font.pixelSize: Theme.fontSizeLarge
 					color: Theme.highlightColor
 				}
 			}
+		}
+	}
+
+	SilicaListView {
+		width: parent.width
+		height: parent.height
+		anchors.top: signedInAsContainer.bottom
+		anchors.topMargin: Theme.paddingLarge
+
+		header: SectionHeader {
+			text: "Settings"
+		}
+
+		model: VisualItemModel {
+			ComboBox {
+				id: vibrationCombo
+				width: mainPage.width
+				label: "Vibration"
+				currentIndex: 1
+
+				menu: ContextMenu {
+					MenuItem { text: "Off" }
+					MenuItem { text: "Short" }
+					MenuItem { text: "Long" }
+					MenuItem { text: "Custom" }
+				}
+				onCurrentIndexChanged: customVibration.visible = (currentIndex === 3)
+			}
+			Item {
+				id: customVibration
+				Label {
+					text: "Duration:"
+				}
+				Slider {
+					id: durationSlider
+					width: mainPage.width
+					value: 400
+					valueText: Math.round(value)
+					minimumValue: 100
+					maximumValue: 1000
+				}
+				Label {
+					text: "Intensity:"
+				}
+				Slider {
+					id: intensitySlider
+					width: mainPage.width
+					value: 0.5
+					valueText: value
+					minimumValue: 0.05
+					maximumValue: 1.0
+				}
+			}
+			ComboBox {
+				id: soundCombo
+				width: mainPage.width
+				label: "Sounds"
+				currentIndex: 0
+
+				menu: ContextMenu {
+					MenuItem { text: "No sound" }
+					MenuItem { text: "They don't work" }
+				}
+			}
+			Button {
+				text: "Test notification"
+				anchors.horizontalCenter: parent.horizontalCenter
+				onReleased: notification()
+			}
+		}
+	}
+	HapticsEffect {
+		id: notificationVibrationShort
+		intensity: 0.4
+		duration: 400
+	}
+
+	HapticsEffect {
+		id: notificationVibrationLong
+		intensity: 0.6
+		duration: 700
+	}
+
+	HapticsEffect {
+		id: notificationVibrationCustom
+		intensity: intensitySlider.value
+		duration: durationSlider.value
+	}
+
+	function notification()
+	{
+		if (vibrationCombo.currentIndex === 1) {
+			notificationVibrationShort.start();
+		} else if (vibrationCombo.currentIndex === 2) {
+			notificationVibrationLong.start();
+		} else if (vibrationCombo.currentIndex === 3) {
+			notificationVibrationCustom.start();
 		}
 	}
 }
