@@ -130,77 +130,62 @@ Page {
 					color: Theme.highlightColor
 				}
 			}
+			Column {
+				width: parent.width
+
+				anchors {
+					top: signedInAsContainer.bottom
+					topMargin: Theme.paddingLarge
+				}
+
+				SectionHeader { text: "Settings" }
+
+				ComboBox {
+					label: "Vibration:"
+					menu: ContextMenu {
+						MenuItem { text: "Off" }
+						MenuItem { text: "Short" }
+						MenuItem { text: "Long" }
+						MenuItem { text: "Custom" }
+					}
+					onCurrentIndexChanged: customVibration.visible = (currentIndex === 3)
+				}
+
+				Column {
+					id: customVibration
+					visible: false
+					width: parent.width
+					spacing: Theme.paddingSmall
+					Slider {
+						id: durationSlider
+						width: mainPage.width
+						value: 400
+						valueText: Math.round(value)
+						minimumValue: 100
+						maximumValue: 1000
+						label: "Duration"
+					}
+					Slider {
+						id: intensitySlider
+						width: mainPage.width
+						value: 0.5
+						valueText: value
+						minimumValue: 0.05
+						maximumValue: 1.0
+						label: "Intensity"
+					}
+				}
+
+				Button {
+					text: "Test notification"
+					anchors.horizontalCenter: parent.horizontalCenter
+					onReleased: notification()
+				}
+			}
 		}
+		VerticalScrollDecorator {}
 	}
 
-	SilicaListView {
-		width: parent.width
-		height: parent.height
-		anchors.top: signedInAsContainer.bottom
-		anchors.topMargin: Theme.paddingLarge
-
-		header: SectionHeader {
-			text: "Settings"
-		}
-
-		model: VisualItemModel {
-			ComboBox {
-				id: vibrationCombo
-				width: mainPage.width
-				label: "Vibration"
-				currentIndex: 1
-
-				menu: ContextMenu {
-					MenuItem { text: "Off" }
-					MenuItem { text: "Short" }
-					MenuItem { text: "Long" }
-					MenuItem { text: "Custom" }
-				}
-				onCurrentIndexChanged: customVibration.visible = (currentIndex === 3)
-			}
-			Item {
-				id: customVibration
-				Label {
-					text: "Duration:"
-				}
-				Slider {
-					id: durationSlider
-					width: mainPage.width
-					value: 400
-					valueText: Math.round(value)
-					minimumValue: 100
-					maximumValue: 1000
-				}
-				Label {
-					text: "Intensity:"
-				}
-				Slider {
-					id: intensitySlider
-					width: mainPage.width
-					value: 0.5
-					valueText: value
-					minimumValue: 0.05
-					maximumValue: 1.0
-				}
-			}
-			ComboBox {
-				id: soundCombo
-				width: mainPage.width
-				label: "Sounds"
-				currentIndex: 0
-
-				menu: ContextMenu {
-					MenuItem { text: "No sound" }
-					MenuItem { text: "They don't work" }
-				}
-			}
-			Button {
-				text: "Test notification"
-				anchors.horizontalCenter: parent.horizontalCenter
-				onReleased: notification()
-			}
-		}
-	}
 	HapticsEffect {
 		id: notificationVibrationShort
 		intensity: 0.4
