@@ -67,6 +67,10 @@ Page {
 				visible: signedIn
 				onClicked: resetLogin();
 			}
+			MenuItem {
+				text: "Settings"
+				onClicked: pageStack.push(Qt.resolvedUrl("Settings.qml"))
+			}
 		}
 
 		ViewPlaceholder {
@@ -154,108 +158,34 @@ Page {
 				}
 				Label {
 					id: unreadLabel
-					text: "Loading unread messages.."
+					text: "No information about unread messages"
 					font.pixelSize: Theme.fontSizeLarge
 				}
 			}
 
-			Column {
-				width: parent.width
-
+			Button {
+				text: "Manually check for unread messages"
 				anchors {
 					top: unreadLabelsRow.bottom
-					bottomMargin: Theme.paddingLarge
+					topMargin: Theme.paddingLarge
+					horizontalCenter: parent.horizontalCenter
 				}
-
-				SectionHeader { text: "Settings" }
-
-				ComboBox {
-					id: vibrationCombo
-					label: "Vibration:"
-					currentIndex: 1
-					menu: ContextMenu {
-						MenuItem { text: "Off" }
-						MenuItem { text: "Short" }
-						MenuItem { text: "Long" }
-						MenuItem { text: "Custom" }
-					}
-					onCurrentIndexChanged: customVibration.visible = (currentIndex === 3)
-				}
-
-				Column {
-					id: customVibration
-					visible: false
-					width: parent.width
-					spacing: Theme.paddingSmall
-					Slider {
-						id: durationSlider
-						width: mainPage.width
-						value: 400
-						valueText: Math.round(value)
-						minimumValue: 100
-						maximumValue: 1000
-						label: "Duration"
-					}
-					Slider {
-						id: intensitySlider
-						width: mainPage.width
-						value: 0.5
-						valueText: value
-						minimumValue: 0.05
-						maximumValue: 1.0
-						label: "Intensity"
-					}
-				}
-
-				Button {
-					text: "Test notification"
-					anchors.horizontalCenter: parent.horizontalCenter
-					anchors.topMargin: Theme.paddingLarge
-					onReleased: notification()
-				}
-				Button {
-					text: "Get unread messages"
-					anchors.horizontalCenter: parent.horizontalCenter
-					anchors.topMargin: Theme.paddingLarge
-					onReleased: pollForUnreadMessages()
-				}
+				onReleased: pollForUnreadMessages()
 			}
-		}
-		VerticalScrollDecorator {}
-	}
 
-	HapticsEffect {
-		id: notificationVibrationShort
-		intensity: 0.4
-		duration: 400
-	}
-
-	HapticsEffect {
-		id: notificationVibrationLong
-		intensity: 0.6
-		duration: 1000
-	}
-
-	HapticsEffect {
-		id: notificationVibrationCustom
-		intensity: intensitySlider.value
-		duration: durationSlider.value
-	}
-
-	function notification()
-	{
-		if (vibrationCombo.currentIndex === 1) {
-			notificationVibrationShort.start();
-		} else if (vibrationCombo.currentIndex === 2) {
-			notificationVibrationLong.start();
-		} else if (vibrationCombo.currentIndex === 3) {
-			notificationVibrationCustom.start();
+			Timer {
+				interval: 3 * 60 * 1000
+				repeat: true
+				running: true
+				triggeredOnStart: true
+				onTriggered: pollForUnreadMessages()
+			}
 		}
 	}
 
 	function pollForUnreadMessages()
 	{
-		unreadLabel.text = "Loading unread messages..";
+		unreadLabel.text = "Loading unread messages...";
 		console.log("Getting unread messages...");
 		Api.makeRequest("messages.getDialogs", access_token_pty, { count: 0, unread: 1 },
 		function(data) {
