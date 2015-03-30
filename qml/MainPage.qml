@@ -78,6 +78,7 @@ Page {
 		Item {
 			anchors.fill: parent
 			visible: signedIn
+
 			Label {
 				id: signedInAsTextLabel
 				text: "Signed in as:"
@@ -130,17 +131,46 @@ Page {
 					color: Theme.highlightColor
 				}
 			}
+
+			Row {
+				id: unreadLabelsRow
+				width: numberOfUnreadLabel.width + unreadLabel.width
+				anchors {
+					top: signedInAsContainer.bottom
+					topMargin: Theme.paddingLarge
+					horizontalCenter: parent.horizontalCenter
+				}
+
+				Label {
+					id: numberOfUnreadLabel
+					text: ""
+					font.pixelSize: Theme.fontSizeLarge
+					color: Theme.highlightColor
+				}
+				Label {
+					id: weirdUnreadSpacer
+					text: ""
+					font.pixelSize: Theme.fontSizeLarge
+				}
+				Label {
+					id: unreadLabel
+					text: "Loading unread messages.."
+					font.pixelSize: Theme.fontSizeLarge
+				}
+			}
+
 			Column {
 				width: parent.width
 
 				anchors {
-					top: signedInAsContainer.bottom
-					topMargin: Theme.paddingLarge
+					top: unreadLabelsRow.bottom
+					bottomMargin: Theme.paddingLarge
 				}
 
 				SectionHeader { text: "Settings" }
 
 				ComboBox {
+					id: vibrationCombo
 					label: "Vibration:"
 					currentIndex: 1
 					menu: ContextMenu {
@@ -225,10 +255,26 @@ Page {
 
 	function pollForUnreadMessages()
 	{
+		unreadLabel.text = "Loading unread messages..";
 		console.log("Getting unread messages...");
 		Api.makeRequest("messages.getDialogs", access_token_pty, { count: 0, unread: 1 },
 		function(data) {
-			console.log("response[0].count: " + data[0].count);
+			var unread = data.count;
+			console.log("data.count: " + unread);
+
+			if (unread === 0) {
+				numberOfUnreadLabel.text = "";
+				weirdUnreadSpacer.text = "";
+				unreadLabel.text = "No new messages"
+			} else if (unread === 1) {
+				numberOfUnreadLabel.text = unread;
+				weirdUnreadSpacer.text = " ";
+				unreadLabel.text = "unread message"
+			} else {
+				numberOfUnreadLabel.text = unread;
+				weirdUnreadSpacer.text = " ";
+				unreadLabel.text = "unread messages"
+			}
 		});
 	}
 }
