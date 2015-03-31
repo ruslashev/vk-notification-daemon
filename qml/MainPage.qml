@@ -22,9 +22,6 @@ Page {
 		function(output) {
 			// todo: error handling
 			var data = output.response;
-			console.log("data[0].first_name: " + data[0].first_name);
-			console.log("data[0].last_name: " + data[0].last_name);
-			console.log("data[0].photo_100: " + data[0].photo_100);
 			nameLabel.text = data[0].first_name + " " + data[0].last_name;
 			avatarImage.source = data[0].photo_100;
 			userInfoGettingFinished = true;
@@ -122,7 +119,6 @@ Page {
 					}
 					source: ""
 					visible: userInfoGettingFinished
-					fillMode: Image.PreserveAspectFit
 				}
 
 				BusyIndicator {
@@ -189,10 +185,9 @@ Page {
 			}
 
 			Timer {
-				interval: 3 * 60 * 1000
+				interval: 1 * 1000 * 60
 				repeat: true
 				running: true
-				triggeredOnStart: true
 				onTriggered: pollForUnreadMessages()
 			}
 		}

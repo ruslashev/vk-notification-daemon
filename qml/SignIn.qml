@@ -2,7 +2,7 @@ import QtQuick 2.0
 import QtWebKit 3.0
 import Sailfish.Silica 1.0
 
-import "js/login.js" as Login
+import "js/sign-in.js" as SignInJS
 
 Page {
 	id: webViewPage
@@ -24,7 +24,7 @@ Page {
 			bottomMargin: webViewPage.isPortrait ? progressPanel.visibleSize : 0
 		}
 
-		url: Login.getLoginURL()
+		url: SignInJS.getLoginURL()
 
 		opacity: 0
 
@@ -33,7 +33,7 @@ Page {
 			if (loadRequest.status === WebView.LoadSucceededStatus) {
 				webViewLoadingSucceeded = true
 				opacity = 1
-				var res = Login.webViewLoadingFinished(url)
+				var res = SignInJS.webViewLoadingFinished(url)
 				if (res === true) {
 					pageStack.pop(undefined, PageStackAction.Animated)
 				}
@@ -52,7 +52,7 @@ Page {
 			anchors.horizontalCenter: parent.horizontalCenter
 		}
 		Button {
-			text: "webView.reload() doesn't work\nand I don't know why. i mean\nwhy would you even try to login\nwithout internet connection, dude?"
+			text: "webView.reload() doesn't work\nand I don't know why. \nwhy would you even try to login\nwithout internet connection, dude?"
 			onClicked: webView.reload()
 			anchors {
 				horizontalCenter: parent.horizontalCenter
