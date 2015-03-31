@@ -10,21 +10,23 @@ CoverBackground {
 		Label {
 			id: appName
 			width: background.width
-			wrapMode: TextEdit.WordWrap
 			anchors.horizontalCenter: parent.horizontalCenter
-			color: Theme.secondaryHighlightColor
+			horizontalAlignment: Text.AlignHCenter
+			color: Theme.primaryColor
 
 			font.pixelSize: Theme.fontSizeSmall
+			wrapMode: TextEdit.WordWrap
 			text: "VK notification daemon"
 		}
 		Label {
 			id: signInStatus
 			width: background.width
-			wrapMode: TextEdit.WordWrap
 			anchors.horizontalCenter: parent.horizontalCenter
-			color: Theme.primaryColor
+			horizontalAlignment: Text.AlignHCenter
+			color: Theme.secondaryHighlightColor
 
-			text: "Not signed in blalb lba lab lab abl "
+			wrapMode: TextEdit.WordWrap
+			text: "if only I knew how to get who's logged in now, ye"
 		}
 	}
 }

@@ -12,20 +12,22 @@ Page {
 
 	property bool signedIn: false
 	property string access_token_pty: ""
+	property bool userInfoGettingFinished: false
 
 	function getNameAndAvatar()
 	{
 		var user_id = Storage.select("user_id");
 		// pray for user_id
 		Api.makeRequest("users.get", access_token_pty, { user_id: user_id, fields: 'photo_100' },
-		function(response) {
+		function(output) {
 			// todo: error handling
-			var data = response.data;
+			var data = output.response;
 			console.log("data[0].first_name: " + data[0].first_name);
 			console.log("data[0].last_name: " + data[0].last_name);
 			console.log("data[0].photo_100: " + data[0].photo_100);
 			nameLabel.text = data[0].first_name + " " + data[0].last_name;
 			avatarImage.source = data[0].photo_100;
+			userInfoGettingFinished = true;
 		})
 	}
 
@@ -111,15 +113,29 @@ Page {
 
 				Image {
 					id: avatarImage
+					width: 100
+					height: 100
 					anchors {
 						left: parent.left
 						leftMargin: Theme.paddingMedium
 						verticalCenter: parent.verticalCenter
 					}
-					source: "image://theme/nemomobile-busyindicator"
+					source: ""
+					visible: userInfoGettingFinished
 					fillMode: Image.PreserveAspectFit
+				}
+
+				BusyIndicator {
 					width: 100
 					height: 100
+					anchors {
+						left: parent.left
+						leftMargin: Theme.paddingMedium
+						verticalCenter: parent.verticalCenter
+					}
+					visible: !userInfoGettingFinished
+					running: true
+					size: BusyIndicatorSize.Medium
 				}
 
 				Label {
@@ -187,11 +203,10 @@ Page {
 		unreadLabel.text = "Loading unread messages...";
 		console.log("Getting unread messages...");
 		Api.makeRequest("messages.getDialogs", access_token_pty, { count: 0, unread: 1 },
-		function(response) {
+		function(output) {
 			// todo: error handling
-			var data = response.data;
+			var data = output.response;
 			var unread = data.count;
-			console.log("data.count: " + unread);
 
 			if (unread === 0) {
 				numberOfUnreadLabel.text = "";
