@@ -4,7 +4,9 @@ function get(url, processingCallback)
 	req.open("GET", url, true);
 	req.onreadystatechange = function() {
 		if (req.readyState === XMLHttpRequest.DONE) {
-			processingCallback(JSON.parse(req.responseText).response);
+			console.log("Api returned for " + url);
+			console.log(JSON.stringify(JSON.parse(req.responseText)));
+			processingCallback(JSON.parse(req.responseText));
 		}
 	}
 	req.send();

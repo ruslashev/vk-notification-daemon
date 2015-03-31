@@ -18,7 +18,9 @@ Page {
 		var user_id = Storage.select("user_id");
 		// pray for user_id
 		Api.makeRequest("users.get", access_token_pty, { user_id: user_id, fields: 'photo_100' },
-		function(data) {
+		function(response) {
+			// todo: error handling
+			var data = response.data;
 			console.log("data[0].first_name: " + data[0].first_name);
 			console.log("data[0].last_name: " + data[0].last_name);
 			console.log("data[0].photo_100: " + data[0].photo_100);
@@ -35,10 +37,11 @@ Page {
 			signedIn = true;
 			access_token_pty = access_token;
 			getNameAndAvatar();
+			pollForUnreadMessages();
 		}
 	}
 
-	function resetLogin()
+	function logOut()
 	{
 		Storage.clearDB();
 		Storage.constructDB();
@@ -65,11 +68,7 @@ Page {
 			MenuItem {
 				text: "Log out"
 				visible: signedIn
-				onClicked: resetLogin();
-			}
-			MenuItem {
-				text: "Settings"
-				onClicked: pageStack.push(Qt.resolvedUrl("Settings.qml"))
+				onClicked: logOut();
 			}
 		}
 
@@ -84,7 +83,7 @@ Page {
 			visible: signedIn
 
 			Label {
-				id: signedInAsTextLabel
+				id: signedInAsLabel
 				text: "Signed in as:"
 				anchors {
 					top: parent.top
@@ -99,14 +98,14 @@ Page {
 				width: parent.width
 				height: avatarImage.height + Theme.paddingMedium*2
 				anchors {
-					top: signedInAsTextLabel.bottom
+					top: signedInAsLabel.bottom
 					topMargin: Theme.paddingMedium
 				}
 
 				Rectangle {
 					anchors.fill: parent
 					color: Theme.highlightColor
-					opacity: 0.3
+					opacity: 0.2
 					z: -1
 				}
 
@@ -188,7 +187,9 @@ Page {
 		unreadLabel.text = "Loading unread messages...";
 		console.log("Getting unread messages...");
 		Api.makeRequest("messages.getDialogs", access_token_pty, { count: 0, unread: 1 },
-		function(data) {
+		function(response) {
+			// todo: error handling
+			var data = response.data;
 			var unread = data.count;
 			console.log("data.count: " + unread);
 
