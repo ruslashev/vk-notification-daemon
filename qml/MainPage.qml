@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtFeedback 5.0
 import Sailfish.Silica 1.0
+import harbour.vknotificationdaemon.notifications 1.0
 
 import "js/storage.js" as Storage
 import "js/api.js" as Api
@@ -46,8 +47,10 @@ Page {
 
 	function pollForUnreadMessages()
 	{
-		unreadLabel.text = "Loading unread messages...";
 		console.log("Getting unread messages...");
+		numberOfUnreadLabel.text = "";
+		weirdUnreadSpacer.text = "";
+		unreadLabel.text = "Loading unread messages...";
 		Api.makeRequest("messages.getDialogs", access_token_pty, { count: 0, unread: 1 },
 		function(response) {
 			var unread = response.count;
@@ -55,20 +58,27 @@ Page {
 				numberOfUnreadLabel.text = "";
 				weirdUnreadSpacer.text = "";
 				unreadLabel.text = "No new messages"
-			} else if (unread === 1) {
-				numberOfUnreadLabel.text = unread;
-				weirdUnreadSpacer.text = " ";
-				unreadLabel.text = "unread message"
 			} else {
-				numberOfUnreadLabel.text = unread;
+				notification.itemCount = Number(unread);
 				weirdUnreadSpacer.text = " ";
-				unreadLabel.text = "unread messages"
+				if (unread === 1) {
+					numberOfUnreadLabel.text = 1;
+					unreadLabel.text = "unread message"
+
+					notification.previewBody = "1 unread message";
+					notification.summary = "1 unread message";
+					notification.body = "From Todo McTodoish";
+				} else {
+					numberOfUnreadLabel.text = unread;
+					unreadLabel.text = "unread messages"
+
+					notification.previewBody = unread + " unread messages";
+					notification.summary = unread + " unread messages";
+					notification.body = "From Todo McTodoish, Todoisa Todoisovna";
+				}
+				notification.publish();
 			}
 		});
-	}
-
-	function notify()
-	{
 	}
 
 	onStatusChanged: {
@@ -200,6 +210,7 @@ Page {
 			}
 
 			Button {
+				id: manualCheckButton
 				text: "Manually check for unread messages"
 				anchors {
 					top: unreadLabelsRow.bottom
@@ -209,8 +220,21 @@ Page {
 				onReleased: pollForUnreadMessages()
 			}
 
+			Notification {
+				id: notification
+				category: "x-vk-notification-daemon.newmessage"
+				appName: "vk notification daemon"
+				appIcon: "image://theme/icon-s-sms"
+				summary: "New messages"
+				body: ""
+				previewSummary: "vk notification daemon"
+				previewBody: ""
+				itemCount: 1
+				timestamp: "2013-02-20 18:21:00"
+			}
+
 			Timer {
-				interval: 1 * 1000 * 10
+				interval: 1 * 1000 * 60
 				repeat: true
 				running: true
 				onTriggered: pollForUnreadMessages()

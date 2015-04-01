@@ -14,6 +14,10 @@ TARGET = vk-notification-daemon
 
 CONFIG += sailfishapp
 
+QT += dbus
+
+include(src/notifications.pri)
+
 SOURCES += src/vk-notification-daemon.cpp
 
 OTHER_FILES += qml/vk-notification-daemon.qml \

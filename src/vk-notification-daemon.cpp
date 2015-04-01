@@ -3,16 +3,18 @@
 #endif
 
 #include <sailfishapp.h>
+#include <notification.h>
+#include <QtQml>
 
 int main(int argc, char *argv[])
 {
 	QGuiApplication *app = SailfishApp::application(argc, argv);
 	QQuickView *view = SailfishApp::createView();
 
-	// TokenManager token_manager;
-	// view->rootContext()->setContextProperty("token_manager", &token_manager);
-	view->setSource(
-			SailfishApp::pathTo(
+	qmlRegisterType<Notification>("harbour.vknotificationdaemon.notifications",
+			1, 0, "Notification");
+
+	view->setSource(SailfishApp::pathTo(
 				QString("qml/vk-notification-daemon.qml")));
 	view->show();
 
