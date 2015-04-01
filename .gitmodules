@@ -1,0 +1,3 @@
+[submodule "nemo-qml-plugin-notifications"]
+	path = nemo-qml-plugin-notifications
+	url = https://github.com/nemomobile/nemo-qml-plugin-notifications
