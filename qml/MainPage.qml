@@ -44,6 +44,33 @@ Page {
 		signedIn = false;
 	}
 
+	function pollForUnreadMessages()
+	{
+		unreadLabel.text = "Loading unread messages...";
+		console.log("Getting unread messages...");
+		Api.makeRequest("messages.getDialogs", access_token_pty, { count: 0, unread: 1 },
+		function(response) {
+			var unread = response.count;
+			if (unread === 0) {
+				numberOfUnreadLabel.text = "";
+				weirdUnreadSpacer.text = "";
+				unreadLabel.text = "No new messages"
+			} else if (unread === 1) {
+				numberOfUnreadLabel.text = unread;
+				weirdUnreadSpacer.text = " ";
+				unreadLabel.text = "unread message"
+			} else {
+				numberOfUnreadLabel.text = unread;
+				weirdUnreadSpacer.text = " ";
+				unreadLabel.text = "unread messages"
+			}
+		});
+	}
+
+	function notify()
+	{
+	}
+
 	onStatusChanged: {
 		if (status === PageStatus.Active) {
 			Storage.constructDB();
@@ -189,30 +216,6 @@ Page {
 				onTriggered: pollForUnreadMessages()
 			}
 		}
-	}
-
-	function pollForUnreadMessages()
-	{
-		unreadLabel.text = "Loading unread messages...";
-		console.log("Getting unread messages...");
-		Api.makeRequest("messages.getDialogs", access_token_pty, { count: 0, unread: 1 },
-		function(response) {
-			var unread = response.count;
-
-			if (unread === 0) {
-				numberOfUnreadLabel.text = "";
-				weirdUnreadSpacer.text = "";
-				unreadLabel.text = "No new messages"
-			} else if (unread === 1) {
-				numberOfUnreadLabel.text = unread;
-				weirdUnreadSpacer.text = " ";
-				unreadLabel.text = "unread message"
-			} else {
-				numberOfUnreadLabel.text = unread;
-				weirdUnreadSpacer.text = " ";
-				unreadLabel.text = "unread messages"
-			}
-		});
 	}
 }
 
