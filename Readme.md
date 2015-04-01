@@ -6,7 +6,7 @@ This is a small app for Sailfish OS that provides user with updates for the soci
 
 Getting notifications with the official android application sucks, since they don't come at all. Or they do, but if you leave it open on the main screen, but even then all you'll get is a message in the notification drawer - no sounds, no flashing led, no vibration.
 
-So far it doesn't even notify yet, but that's what is being worked on. Sometime later it will actually be a background process that will auto start on device power on.
+So far it isn't even a daemon yet, but atleast it notifies. Sometime later it will actually be a background process that will auto start on device power on.
 
 ## testing, developing & helping out
 
