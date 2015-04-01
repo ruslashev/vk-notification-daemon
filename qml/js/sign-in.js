@@ -1,7 +1,5 @@
 .import "super-secret-key.js" as SSK
 .import "storage.js" as Storage
-.import QtQuick 2.0 as QtQ
-.import Sailfish.Silica 1.0 as Silica
 
 function getLoginURL()
 {
@@ -9,7 +7,7 @@ function getLoginURL()
 	var Permissions = 'messages';
 	var Redirect    = 'https://oauth.vk.com/blank.html';
 	var Display     = 'mobile';
-	var ApiVersion  = '5.28';
+	var ApiVersion  = '5.29';
 
 	var url = 'https://oauth.vk.com/authorize?' +
 		'client_id=' + AppId + '&' +
@@ -26,7 +24,7 @@ function getLoginURL()
 
 function webViewLoadingFinished(url)
 {
-	console.log("URL returned: " + url);
+	console.log("webview loaded URL: " + url);
 
 	var str = url.toString();
 

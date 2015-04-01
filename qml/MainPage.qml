@@ -17,13 +17,10 @@ Page {
 	function getNameAndAvatar()
 	{
 		var user_id = Storage.select("user_id");
-		// pray for user_id
 		Api.makeRequest("users.get", access_token_pty, { user_id: user_id, fields: 'photo_100' },
-		function(output) {
-			// todo: error handling
-			var data = output.response;
-			nameLabel.text = data[0].first_name + " " + data[0].last_name;
-			avatarImage.source = data[0].photo_100;
+		function(response) {
+			nameLabel.text = response[0].first_name + " " + response[0].last_name;
+			avatarImage.source = response[0].photo_100;
 			userInfoGettingFinished = true;
 		})
 	}
@@ -48,7 +45,7 @@ Page {
 	}
 
 	onStatusChanged: {
-		if (status == PageStatus.Active) {
+		if (status === PageStatus.Active) {
 			Storage.constructDB();
 			checkIfSignedIn();
 		}
@@ -131,7 +128,7 @@ Page {
 					}
 					visible: !userInfoGettingFinished
 					running: true
-					size: BusyIndicatorSize.Medium
+					size: BusyIndicatorSize.Large
 				}
 
 				Label {
@@ -149,7 +146,8 @@ Page {
 
 			Row {
 				id: unreadLabelsRow
-				width: numberOfUnreadLabel.width + unreadLabel.width
+				width: numberOfUnreadLabel.width +
+					weirdUnreadSpacer.width + unreadLabel.width
 				anchors {
 					top: signedInAsContainer.bottom
 					topMargin: Theme.paddingLarge
@@ -185,7 +183,7 @@ Page {
 			}
 
 			Timer {
-				interval: 1 * 1000 * 60
+				interval: 1 * 1000 * 10
 				repeat: true
 				running: true
 				onTriggered: pollForUnreadMessages()
@@ -198,10 +196,8 @@ Page {
 		unreadLabel.text = "Loading unread messages...";
 		console.log("Getting unread messages...");
 		Api.makeRequest("messages.getDialogs", access_token_pty, { count: 0, unread: 1 },
-		function(output) {
-			// todo: error handling
-			var data = output.response;
-			var unread = data.count;
+		function(response) {
+			var unread = response.count;
 
 			if (unread === 0) {
 				numberOfUnreadLabel.text = "";

@@ -40,7 +40,7 @@ function printDB()
 		var rs = tx.executeSql('SELECT * FROM Auth');
 		console.log("db contents:");
 		for (var i = 0; i < rs.rows.length; i++) {
-			console.info(rs.rows.item(i).key + " -> " + rs.rows.item(i).value);
+			console.log(rs.rows.item(i).key + " -> " + rs.rows.item(i).value);
 		}
 	})
 }
