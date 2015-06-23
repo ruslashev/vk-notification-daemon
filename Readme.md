@@ -10,7 +10,7 @@ So far it isn't even a daemon yet, but atleast it notifies. Sometime later it wi
 
 ## testing, developing & helping out
 
-Contributions are welcome! Anything, be it bug report (see [issues](https://github.com/ruslashev/vk-notification-daemon/issues)) or code commits.
+Contributions are welcome! Anything, be it bug report (see [issues page](https://github.com/ruslashev/vk-notification-daemon/issues)) or code commits.
 
-Keep in mind that this project uses [nemo-qml-plugin-notifications](https://github.com/nemomobile/nemo-qml-plugin-notifications), so when doing a `git clone`, remember to `git submodule init` and `git submodule update`.
+This project uses [nemo-qml-plugin-notifications](https://github.com/nemomobile/nemo-qml-plugin-notifications), but it is already included in the repo, so there is no need to worry about git submodules and you can just `git clone` and compile.
 
