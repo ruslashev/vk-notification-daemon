@@ -47,6 +47,7 @@ Page {
 
 	function pollForUnreadMessages()
 	{
+		console.log("\n");
 		console.log("Getting unread messages...");
 		numberOfUnreadLabel.text = "";
 		weirdUnreadSpacer.text = "";
@@ -79,6 +80,7 @@ Page {
 				notification.publish();
 			}
 		});
+		console.log("\n");
 	}
 
 	onStatusChanged: {
@@ -222,19 +224,19 @@ Page {
 
 			Notification {
 				id: notification
-				category: "x-vk-notification-daemon.newmessage"
+				category: "x-nemo.messaging.im.conf"
 				appName: "vk notification daemon"
-				appIcon: "image://theme/icon-s-sms"
+				appIcon: "/usr/share/themes/base/meegotouch/icons/icon-l-sms"
 				summary: "New messages"
 				body: ""
-				previewSummary: "vk notification daemon"
+				previewSummary: "New messages"
 				previewBody: ""
-				itemCount: 1
+				itemCount: 2
 				timestamp: "2013-02-20 18:21:00"
 			}
 
 			Timer {
-				interval: 1 * 1000 * 60
+				interval: 1 * 60 * 1000
 				repeat: true
 				running: true
 				onTriggered: pollForUnreadMessages()
